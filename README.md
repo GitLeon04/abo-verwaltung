@@ -1,5 +1,8 @@
 # Abo-Verwaltung (TDD-Projekt)
 
+<!-- Test für CI/CD -->
+
+
 Ein voll funktionsfähiges Aboverwaltungssystem mit moderner Weboberfläche, REST-API, Validierung, Testabdeckung und Exportfunktionen – vollständig entwickelt nach dem Prinzip **testgetriebener Entwicklung (TDD)**.
 
 ---
