@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Abo-Verwaltung</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+<div class="container">
+
+    <!-- Kopfzeile -->
+    <header class="header">
+        <h1>Meine Abos</h1>
+        <button id="themeToggle" aria-label="Dark-Mode umschalten">🌙</button>
+    </header>
+
+    <!-- Formular -->
+    <form id="aboForm">
+        <input type="hidden" id="aboId">
+        <input type="text"  id="name" placeholder="Name" required
+               pattern="[A-Za-zÄÖÜäöüß\\s+&\\-.]+"
+               title="Buchstaben, Leerzeichen, + & - .">
+        <input type="text"  id="provider" placeholder="Anbieter" required
+               pattern="[A-Za-zÄÖÜäöüß\\s+&\\-.]+"
+               title="Buchstaben, Leerzeichen, + & - .">
+        <input type="number" id="price" placeholder="Preis" step="0.01" min="0" required>
+        <select id="interval">
+            <option value="MONTHLY">Monatlich</option>
+            <option value="YEARLY">Jährlich</option>
+        </select>
+        <input type="text" id="startDate" placeholder="TT.MM.JJJJ" maxlength="10" required>
+        <button type="submit">Speichern</button>
+    </form>
+
+    <!-- Tabelle -->
+    <table id="aboTable">
+        <thead>
+        <tr>
+            <th>Name</th><th>Anbieter</th><th>Preis</th><th>Intervall</th>
+            <th>Startdatum</th><th>Gekündigt</th><th>Aktion</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Summary -->
+    <p class="summary">
+        Monatskosten gesamt:&nbsp;<span id="summary">0,00 €</span>
+    </p>
+
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+/* ======== Farbschema ======== */
+:root{
+    --clr-primary       : #0066cc;
+    --clr-primary-dark  : #004b99;
+    --clr-danger        : #dc3545;
+    --clr-danger-dark   : #b02a37;
+    --clr-muted         : #6c757d;
+    --clr-muted-dark    : #545b62;
+    --bg                : #f5f7fa;
+    --fg                : #333;
+    --bg-alt            : #fff;
+}
+
+[data-theme="dark"]{
+    --bg                : #1c1f22;
+    --fg                : #e4e6eb;
+    --bg-alt            : #2a2d31;
+    --clr-primary       : #4ea1ff;
+    --clr-primary-dark  : #2e7bd6;
+    --clr-danger        : #f25d69;
+    --clr-danger-dark   : #c43d48;
+    --clr-muted         : #90979e;
+    --clr-muted-dark    : #6c757d;
+}
+
+/* ======== Grundlayout ======== */
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    display:flex;
+    justify-content:center;
+    padding:2rem;
+}
+
+.container{width:100%;max-width:880px;}
+
+/* ======== Header ======== */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:1.5rem;
+}
+h1{margin:0;color:var(--clr-primary);}
+#themeToggle{
+    background:none;
+    border:none;
+    font-size:1.4rem;
+    cursor:pointer;
+    color:var(--fg);
+}
+
+/* ======== Formular ======== */
+form{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:1rem;
+    background:var(--bg-alt);
+    padding:1rem;
+    border-radius:6px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    margin-bottom:2rem;
+}
+form input,
+form select,
+form button{
+    padding:.55rem .75rem;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:1rem;
+    width:100%;
+}
+form button{
+    background:var(--clr-primary);
+    color:#fff;
+    border:none;
+    transition:.25s;
+}
+form button:hover{background:var(--clr-primary-dark);}
+
+/* Pfeile aus Number-Input entfernen */
+input[type="number"],
+input[type="text"]{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance:none;margin:0;
+}
+
+/* ======== Tabelle ======== */
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--bg-alt);
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    border-radius:6px;
+    overflow:hidden;
+}
+th,td{
+    padding:.9rem .7rem;
+    text-align:center;
+}
+th{
+    background:var(--clr-primary);
+    color:#fff;
+    font-weight:600;
+}
+tr:nth-child(even){background:rgba(0,0,0,.04);}
+
+/* Buttons in Tabelle */
+button.edit-button,
+button.cancel-button,
+button.delete-button{
+    border:none;
+    border-radius:6px;
+    padding:.4rem .8rem;
+    cursor:pointer;
+    color:#fff;
+}
+.edit-button{background:var(--clr-primary-dark);margin-right:.3rem;}
+.edit-button:hover{background:var(--clr-primary);}
+.cancel-button{background:var(--clr-danger);}
+.cancel-button:hover{background:var(--clr-danger-dark);}
+.delete-button{background:var(--clr-muted);}
+.delete-button:hover{background:var(--clr-muted-dark);}
+
+/* ======== Summary ======== */
+.summary{
+    text-align:center;
+    font-size:1.2rem;
+    font-weight:700;
+    color:var(--clr-primary);
+    margin-top:1.2rem;
+}
+
+/* ======== Responsive ======== */
+@media(max-width:600px){
+    form{grid-template-columns:1fr;}
+    th:nth-child(2),td:nth-child(2),   /* Anbieter */
+    th:nth-child(6),td:nth-child(6){   /* Gekündigt */
+        display:none;
+    }
+}
