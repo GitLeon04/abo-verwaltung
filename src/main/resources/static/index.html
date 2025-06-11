@@ -15,24 +15,43 @@
     <!-- Kopfzeile -->
     <header class="header">
         <h1>Meine Abos</h1>
-        <button id="themeToggle" aria-label="Dark-Mode umschalten">🌙</button>
+
+        <!-- Button-Gruppe: Dark-Mode + CSV-Export -->
+        <div class="btn-group">
+            <button id="themeToggle" aria-label="Dark-Mode umschalten">🌙</button>
+
+            <!-- CSV-Download-Button -->
+            <a id="csvDownload"
+               href="/api/subscriptions/export"
+               download="abos.csv"
+               aria-label="Abos als CSV herunterladen">⬇️ CSV</a>
+        </div>
     </header>
 
     <!-- Formular -->
     <form id="aboForm">
         <input type="hidden" id="aboId">
+
         <input type="text"  id="name" placeholder="Name" required
-               pattern="[A-Za-zÄÖÜäöüß\\s+&\\-.]+"
-               title="Buchstaben, Leerzeichen, + & - .">
+               pattern="[A-Za-zÄÖÜäöüß\s+&\-.]+"
+               title="Buchstaben, Leerzeichen, +, &, -, .">
+
         <input type="text"  id="provider" placeholder="Anbieter" required
-               pattern="[A-Za-zÄÖÜäöüß\\s+&\\-.]+"
-               title="Buchstaben, Leerzeichen, + & - .">
-        <input type="number" id="price" placeholder="Preis" step="0.01" min="0" required>
+               pattern="[A-Za-zÄÖÜäöüß\s+&\-.]+"
+               title="Buchstaben, Leerzeichen, +, &, -, .">
+
+        <!-- Preis – step 0.01, min 0, max 99 999 999 999,99 -->
+        <input type="number" id="price" placeholder="Preis"
+               step="0.01" min="0" max="99999999999.99" required>
+
         <select id="interval">
             <option value="MONTHLY">Monatlich</option>
             <option value="YEARLY">Jährlich</option>
         </select>
-        <input type="text" id="startDate" placeholder="TT.MM.JJJJ" maxlength="10" required>
+
+        <input type="text" id="startDate" placeholder="TT.MM.JJJJ"
+               maxlength="10" required>
+
         <button type="submit">Speichern</button>
     </form>
 

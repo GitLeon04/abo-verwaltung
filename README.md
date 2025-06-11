@@ -1,118 +1,127 @@
-# Abo-Verwaltung (TDD-Projekt)
 
-<!-- Test für CI/CD -->
+# 📦 Abo‑Verwaltung
 
-
-Ein voll funktionsfähiges Aboverwaltungssystem mit moderner Weboberfläche, REST-API, Validierung, Testabdeckung und Exportfunktionen – vollständig entwickelt nach dem Prinzip **testgetriebener Entwicklung (TDD)**.
+Eine schlanke Spring‑Boot‑Anwendung (Java 17) mit einem puren HTML / JavaScript‑Frontend zum Verwalten deiner laufenden Abonnements.  
+Dank **Docker** kannst du die App mit genau **einem** Befehl starten – ganz ohne lokale JDK‑ oder Maven‑Installation.
 
 ---
 
-## 🔧 Installation & Start
+## Inhaltsübersicht
 
-### Voraussetzungen
-- Java 17+
-- Maven 3.8+
+| Bereich  | Tech / Tool |
+|----------|-------------|
+| **Backend**  | Spring Boot 3 · REST · JPA (H2 / MySQL) |
+| **Frontend** | Plain HTML / JS · Flatpickr · Dark‑Mode · CSV‑Export‑Button |
+| **CI / CD**  | GitHub Actions – Maven‑Build, Tests & automatisches Docker‑Image in GHCR |
+| **Docker‑Image** | `ghcr.io/gitleon04/abo-verwaltung:latest` |
 
-### Build & Run
+---
+
+## 1 · Voraussetzungen
+
+* **Docker 24 oder neuer** (Docker Desktop unter macOS / Windows oder die Engine unter Linux)
+
+Damit ist alles abgedeckt – kein zusätzliches JDK oder Maven nötig, wenn du nur das fertige Release nutzen möchtest.
+
+---
+
+## 2 · Schnellstart (Production‑like)
 
 ```bash
-mvn clean package
-java -jar target/abo-verwaltung-1.0.0.jar
+docker pull ghcr.io/gitleon04/abo-verwaltung:latest
+docker run --rm -p 8080:8080 ghcr.io/gitleon04/abo-verwaltung:latest
 ```
 
-**→ Browser öffnen:** [http://localhost:8080](http://localhost:8080)  
-**→ API-Test mit Swagger:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+*Aufruf im Browser:* **http://localhost:8080**  
+Hier kannst du Abos anlegen, den Dark‑Mode umschalten und über den CSV‑Button deine Daten exportieren.
 
 ---
 
-## 🧩 Features
+## 3 · Eigenes Image bauen (optional)
 
-- Abonnements erstellen, bearbeiten, kündigen & löschen
-- Monatskosten automatisch berechnen
-- Export aller Abos als `.csv`
-- Swagger/OpenAPI: interaktive API-Dokumentation
-- Responsive UI mit Kalender + Autoformatierung
-- Dark-Mode-Toggle per Button
-- Vollständig testgetrieben entwickelt
-
----
-
-## 🔗 API-Endpunkte (Auszug)
-
-| Methode | Pfad                     | Beschreibung                     |
-|---------|--------------------------|----------------------------------|
-| GET     | `/api/subscriptions`     | Alle Abos                        |
-| POST    | `/api/subscriptions`     | Neues Abo erstellen              |
-| PUT     | `/api/subscriptions/{id}`| Abo aktualisieren                |
-| PUT     | `/api/subscriptions/{id}/cancel` | Abo kündigen              |
-| DELETE  | `/api/subscriptions/{id}`| Abo löschen                      |
-| GET     | `/api/subscriptions/summary` | Monatskosten berechnen       |
-| GET     | `/api/subscriptions/export`  | Export als CSV                 |
-
-Weitere Details siehe Swagger:  
-[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
----
-
-## ✅ Testabdeckung
-
-Tests wurden mit JUnit5 und MockMvc geschrieben.
+Falls du Codeänderungen testen oder dein eigenes Image veröffentlichen möchtest:
 
 ```bash
+# Repository klonen
+git clone https://github.com/GitLeon04/abo-verwaltung.git
+cd abo-verwaltung
+
+# JAR bauen
+mvn -B clean package
+
+# Docker‑Image erstellen
+docker build -t abo-verwaltung:local .
+
+# Anwendung starten
+docker run --rm -p 8080:8080 abo-verwaltung:local
+```
+
+---
+
+## 4 · Tests lokal ausführen
+
+Alle Unit‑ und Integration‑Tests laufen komplett ohne Docker:
+
+```bash
+# Nur Tests (schnell)
 mvn test
+
+# Tests + Coverage (JaCoCo) + Checkstyle
+mvn verify
 ```
 
-**Testtypen:**
-- Unit-Tests für Validierung & Logik
-- Controller-Tests mit MockMvc
-- Negative Tests für Fehlerfälle
-- Spezialfälle wie Rundung, leere Liste, ungültiger Input
-
-### JaCoCo Coverage Report
-Nach dem Testlauf generiert unter:
-```
-target/site/jacoco/index.html
-```
-
-> 🔍 **Screenshot** im Ordner `docs/` hinzufügen.
+Die gleiche Test‑Suite läuft auf GitHub automatisch bei jedem Push oder Pull‑Request.  
+Ergebnisse findest du in **GitHub → Actions → Java CI mit Maven**.
 
 ---
 
-## 🐳 Docker (optional)
+## 5 · Entwicklungsmodus mit Hot‑Reload (optional)
 
-```dockerfile
-# Dockerfile
-FROM eclipse-temurin:17-jre
-WORKDIR /app
-COPY target/abo-verwaltung-1.0.0.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+```bash
+mvn spring-boot:run
 ```
+
+*Vorteil:* Änderungen an Java‑Klassen oder Dateien unter `src/main/resources/static/` werden nach wenigen Sekunden automatisch neu geladen.
+
+---
+
+## 6 · Deployment mit Docker Compose + MySQL (optional)
 
 ```yaml
-# docker-compose.yml
+version: "3.9"
 services:
-  abo:
-    build: .
-    ports: ["8080:8080"]
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: abodb
+    volumes: [db-data:/var/lib/mysql]
+
+  abo-verwaltung:
+    image: ghcr.io/gitleon04/abo-verwaltung:latest
+    ports: ["80:8080"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/abodb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on: [db]
+
+volumes:
+  db-data:
 ```
 
----
+```bash
+docker compose up -d
+```
 
-## 📸 Screenshots
-
-| Seite | Bild |
-|-------|------|
-| Hauptansicht (Light) | `docs/ui-light.png` |
-| Dark Mode aktiv      | `docs/ui-dark.png` |
-| Swagger              | `docs/swagger.png` |
-| CSV-Export           | `docs/csv-export.png` |
+Damit läuft MySQL im Container **db**; die Anwendung verbindet sich per Umgebungsvariablen automatisch.
 
 ---
 
-## 👨‍💻 Autor / Version
+## 7 · CI / CD auf einen Blick
 
-Max Mustermann  
-HTWK Leipzig, Modul: Testgetriebene Anwendungsentwicklung  
-Version: 1.0.0  
-Mai 2025
+1. **CI‑Workflow (`ci.yml`)** – jeder Push oder Pull‑Request baut das Projekt und führt alle Tests aus.  
+2. **CD‑Workflow (`cd.yml`)** – nach grünem Build wird ein Docker‑Image erzeugt und als  
+   `ghcr.io/gitleon04/abo-verwaltung` mit den Tags **`latest`** und der Commit‑SHA veröffentlicht.
+
+So liegt nach jedem Merge in `main` unmittelbar ein neues Release‑Artefakt bereit, das auf jedem Docker‑Host ausgeführt werden kann.

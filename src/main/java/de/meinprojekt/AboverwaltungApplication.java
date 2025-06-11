@@ -17,6 +17,5 @@ public class AboverwaltungApplication {
         System.out.println("🔗 Öffne im Browser:");
         System.out.println("   🏠 Web-Oberfläche:    http://localhost:8080");
         System.out.println("   📊 Swagger UI (API):  http://localhost:8080/swagger-ui/index.html");
-        System.out.println("   📁 CSV-Export:        http://localhost:8080/api/subscriptions/export");
     }
 }

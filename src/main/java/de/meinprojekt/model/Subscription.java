@@ -1,10 +1,7 @@
 package de.meinprojekt.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -35,8 +32,10 @@ public class Subscription {
     )
     private String provider;
 
-    @DecimalMin(value = "0.0", inclusive = true,
+    @DecimalMin(value = "0.00", inclusive = true,
                 message = "Preis darf nicht negativ sein")
+    @Digits(integer = 11, fraction = 2,     // max 99 999 999 999,99
+            message = "Maximal 11 Ziffern vor und 2 nach dem Komma erlaubt")
     private BigDecimal price;
 
     @Column(name = "subscription_interval")
